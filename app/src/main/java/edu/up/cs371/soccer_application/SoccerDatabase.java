@@ -18,6 +18,8 @@ import java.util.*;
  */
 public class SoccerDatabase implements SoccerDB {
 
+protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String, SoccerPlayer>();
+
     /**
      * add a player
      *
@@ -26,7 +28,12 @@ public class SoccerDatabase implements SoccerDB {
     @Override
 	public boolean addPlayer(String firstName, String lastName,
 			int uniformNumber, String teamName) {
-        return false;
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName)) return false;
+        else {
+            soccerPlayerHashMap.put(fullName, new SoccerPlayer(firstName, lastName, uniformNumber, teamName));
+            return true;
+        }
 	}
 
     /**
@@ -46,7 +53,7 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
 	public SoccerPlayer getPlayer(String firstName, String lastName) {
-        return null;
+        if(soccerPlayerHashMap) return null;
     }
 
     /**
