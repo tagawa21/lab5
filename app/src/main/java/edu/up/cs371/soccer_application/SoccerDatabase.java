@@ -1,11 +1,14 @@
 package edu.up.cs371.soccer_application;
 
+import android.content.Context;
 import android.util.Log;
 
 import edu.up.cs371.soccer_application.soccerPlayer.SoccerPlayer;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -43,6 +46,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean removePlayer(String firstName, String lastName) {
+            String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.remove(fullName);
+            return true;
+        }
         return false;
     }
 
@@ -53,7 +62,9 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
 	public SoccerPlayer getPlayer(String firstName, String lastName) {
-        if(soccerPlayerHashMap) return null;
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName)) return soccerPlayerHashMap.get(fullName);
+        else return null;
     }
 
     /**
@@ -63,6 +74,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean bumpGoals(String firstName, String lastName) {
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.get(fullName).bumpGoals();
+            return true;
+        }
         return false;
     }
 
@@ -73,6 +90,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean bumpAssists(String firstName, String lastName) {
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.get(fullName).bumpAssists();
+            return true;
+        }
         return false;
     }
 
@@ -83,6 +106,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean bumpShots(String firstName, String lastName) {
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.get(fullName).bumpShots();
+            return true;
+        }
         return false;
     }
 
@@ -93,6 +122,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean bumpSaves(String firstName, String lastName) {
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.get(fullName).bumpSaves();
+            return true;
+        }
         return false;
     }
 
@@ -103,6 +138,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean bumpFouls(String firstName, String lastName) {
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.get(fullName).bumpFouls();
+            return true;
+        }
         return false;
     }
 
@@ -113,6 +154,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean bumpYellowCards(String firstName, String lastName) {
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.get(fullName).bumpYellowCards();
+            return true;
+        }
         return false;
     }
 
@@ -123,6 +170,12 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
     @Override
     public boolean bumpRedCards(String firstName, String lastName) {
+        String fullName = firstName.concat(lastName);
+        if(soccerPlayerHashMap.containsKey(fullName))
+        {
+            soccerPlayerHashMap.get(fullName).bumpRedCards();
+            return true;
+        }
         return false;
     }
 
@@ -134,8 +187,36 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
     @Override
     // report number of players on a given team (or all players, if null)
 	public int numPlayers(String teamName) {
-        return -1;
-	}
+        if(teamName.equals(null))
+        {
+            return soccerPlayerHashMap.size();
+        }
+        else
+        {
+            if(soccerPlayerHashMap.isEmpty())
+            {
+                return 0;
+            }
+            else
+            {
+                /*for(int i = 0; i < soccerPlayerHashMap.size(); i++)
+                {
+                    if((soccerPlayerHashMap.values().toArray()[i]).)
+                    {
+
+                    }
+                }*/
+                int i = 0;
+                for(SoccerPlayer sp : soccerPlayerHashMap.values())
+                {
+                    if(sp.getTeamName().equals(teamName)) {
+                        i++;
+                    }
+                }
+                return i;
+            }
+        }
+    }
 
     /**
      * gives the nth player on a the given team
@@ -144,8 +225,26 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
      */
 	// get the nTH player
 	@Override
-    public SoccerPlayer playerNum(int idx, String teamName) {
-        return null;
+    public SoccerPlayer playerNum(int idx, final String teamName) {
+        if(teamName.equals(null))
+        {
+            SoccerPlayer soccerPlayerArray[] = soccerPlayerHashMap.values().toArray(new SoccerPlayer[0]);
+            return soccerPlayerArray[idx];
+        }
+        else
+        {
+            SoccerPlayer soccerPlayerArray[] = soccerPlayerHashMap.values().toArray(new SoccerPlayer[0]);
+            //soccerPlayerArray = Arrays.stream(soccerPlayerArray).filter(x -> x.getTeamName().equals(teamName)).toArray(new SoccerPlayer[0]);
+            ArrayList <SoccerPlayer> soccerPlayerAL = new ArrayList();
+            for(int i = 0; i < soccerPlayerArray.length; i++){
+                if(soccerPlayerArray[i].getTeamName().equals(teamName))
+                {
+                    soccerPlayerAL.add(soccerPlayerArray[i]);
+                }
+            }
+            return soccerPlayerAL.get(idx);
+        }
+
     }
 
     /**
@@ -167,6 +266,15 @@ protected HashMap<String, SoccerPlayer> soccerPlayerHashMap = new HashMap<String
 	// write data to file
     @Override
 	public boolean writeData(File file) {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file,true);
+            for(SoccerPlayer player : soccerPlayerHashMap.values()) {
+                fileOutputStream.write((data + System.getProperty("line.separator")).getBytes());
+            }
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
         return false;
 	}
 
